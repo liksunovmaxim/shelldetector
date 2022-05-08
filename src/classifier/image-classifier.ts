@@ -45,4 +45,14 @@ export class ImageClassifier {
       image.src = dataUrl;
     });
   }
+
+  public classifyByImage(image: HTMLImageElement): Promise<ClassifierResult[]> {
+    return new Promise<ClassifierResult[]>((resolve, reject) => {
+      this._classifier.then((r) =>
+        r.classify(image, (error: any, results: ClassifierResult[]) => {
+          resolve(results);
+        })
+      );
+    });
+  }
 }
