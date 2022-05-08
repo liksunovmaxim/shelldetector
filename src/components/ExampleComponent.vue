@@ -22,7 +22,9 @@
           src="https://images.unsplash.com/photo-1503792501406-2c40da09e1e2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=752&q=80"
           alt="sciscors"
           crossorigin="anonymous"
+          v-if="!result.length > 0"
         />
+        <final-result :result="result" v-else />
       </div>
       <button @click="detect">
         <span v-if="isLoading">Loading ... </span>
@@ -36,22 +38,24 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import { defineComponent } from 'vue';
 import { imageClassifierFactory } from '../classifier';
+import FinalResult from 'components/FinalResult.vue';
+
 const video = document.getElementById('video') as HTMLVideoElement;
 const img = document.getElementById('video') as HTMLImageElement;
 const classifier = imageClassifierFactory();
 
 export default defineComponent({
   name: 'App',
-
+  components: {FinalResult},
   setup() {
     const imgRef = ref(img);
     // const isLoading = ref(false);
     const videoRef = ref<HTMLVideoElement>(video);
     const isStreaming = ref(false);
-    const result = ref([]);
+    const result = ref([]) as Ref<any[]>;
 
     // async function detect() {
     //   const img = imgRef.value;
@@ -76,7 +80,8 @@ export default defineComponent({
     async function detectImage(event: any) {
       const cl = await classifier;
       console.log(cl);
-      const result = await cl.classify(event.target.files[0]);
+      const res = await cl.classify(event.target.files[0]);
+      result.value = res;
       console.log(result);
     }
 
