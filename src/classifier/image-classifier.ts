@@ -20,7 +20,7 @@ export class ImageClassifier {
       image.onload = () => {
         // eslint-disable-next-line no-underscore-dangle
         this._classifier.then((r) =>
-          r.classify(image, (error: any, results: ClassifierResult[]) => {
+          r.classify  (image, (error: any, results: ClassifierResult[]) => {
             resolve(results);
           })
         );
@@ -30,7 +30,7 @@ export class ImageClassifier {
   }
 
   public classifyByPath(dataUrl: string): Promise<ClassifierResult[]> {
-    return new Promise<ClassifierResult[]>((resolve, reject) => {
+    return new Promise<ClassifierResult[]>((resolve) => {
       // eslint-disable-next-line no-underscore-dangle
       const image = document.createElement('img');
       image.onload = () => {
@@ -47,7 +47,7 @@ export class ImageClassifier {
   }
 
   public classifyByImage(image: HTMLImageElement): Promise<ClassifierResult[]> {
-    return new Promise<ClassifierResult[]>((resolve, reject) => {
+    return new Promise<ClassifierResult[]>((resolve) => {
       this._classifier.then((r) =>
         r.classify(image, (error: any, results: ClassifierResult[]) => {
           resolve(results);

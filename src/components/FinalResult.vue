@@ -5,12 +5,12 @@
     target="_blank"
     :href="link"
   >
-    {{finalRes.label}}
+    {{final.label}}
   </q-item>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRaw } from 'vue';
+import { defineComponent, toRaw, computed } from 'vue';
 
 export default defineComponent({
   name: 'FinalResult',
@@ -21,11 +21,10 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const maxValue = toRaw(Math.max(...props.result.map(o => (o as any).confidence)));
-    const finalRes = toRaw(props.result).filter(i => (i as any).confidence === maxValue)[0]
+    const final = computed(() => toRaw(props.result).filter(i => (i as any).confidence === Math.max(...props.result.map(o => (o as any).confidence)))[0])
 
     return {
-      finalRes
+      final
     }
   }
 });
