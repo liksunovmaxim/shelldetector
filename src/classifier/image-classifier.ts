@@ -28,4 +28,21 @@ export class ImageClassifier {
       image.src = imageUrl;
     });
   }
+
+  public classifyByPath(dataUrl: string): Promise<ClassifierResult[]> {
+    return new Promise<ClassifierResult[]>((resolve, reject) => {
+      // eslint-disable-next-line no-underscore-dangle
+      const image = document.createElement('img');
+      image.onload = () => {
+        // eslint-disable-next-line no-underscore-dangle
+        this._classifier.then((r) =>
+          r.classify(image, (error: any, results: ClassifierResult[]) => {
+            resolve(results);
+          })
+        );
+      };
+
+      image.src = dataUrl;
+    });
+  }
 }
