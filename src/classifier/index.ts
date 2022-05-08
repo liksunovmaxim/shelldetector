@@ -1,6 +1,6 @@
 import { ImageClassifier } from './image-classifier';
 
-const modelURL = 'https://teachablemachine.withgoogle.com/models/1sWLyUXeb/';
+const modelURL = 'https://teachablemachine.withgoogle.com/models/_QrAB1gc5/';
 const ml5Source = 'https://unpkg.com/ml5@0.12.2/dist/ml5.min.js';
 
 export function imageClassifierFactory(): Promise<ImageClassifier> {
