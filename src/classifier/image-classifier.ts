@@ -17,14 +17,15 @@ export class ImageClassifier {
     return new Promise<ClassifierResult[]>((resolve) => {
       const imageUrl = this._urlCreator.createObjectURL(imageFile);
       const image = document.createElement('img');
+      image.onload = () => {
+        // eslint-disable-next-line no-underscore-dangle
+        this._classifier.then((r) =>
+          r.classify(image, (error: any, results: ClassifierResult[]) => {
+            resolve(results);
+          })
+        );
+      };
       image.src = imageUrl;
-      console.log(image);
-      this._classifier.then((r) =>
-        r.classify(image, (error: any, results: ClassifierResult[]) => {
-          console.log(results);
-          resolve(results);
-        })
-      );
     });
   }
 }
