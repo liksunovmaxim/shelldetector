@@ -3,7 +3,7 @@
     <div style="margin: 8px;">
       <h3 class="text-2xl text-green-800" style="margin-top: 0; text-align: center;">Виберiть або сфотографуйте</h3>
       <div style="max-width: 300px; margin-bottom: 40px;">
-        <q-file v-model="fileRef" color="light-green-5" glossy bg-color="green-6" filled label="Choose file">
+        <q-file v-model="fileRef" color="light-green-5" glossy bg-color="green-6" filled label="Вибрати файл">
           <template v-slot:prepend>
             <q-icon name="attachment" color="light-green-5" />
           </template>
@@ -11,11 +11,11 @@
       </div>
 
       <div v-if="!isStreaming">
-        <q-btn @click="openCamera" color="green-6" glossy label="Open camera"  />
+        <q-btn @click="openCamera" color="green-6" glossy label="Вiдкрити камеру"  />
       </div>
       <div v-else class="flex justify-between">
-        <q-btn @click="stopStreaming" color="black" glossy label="Stop Streaming" />
-        <q-btn @click="snapshot" color="black" glossy label="Snapshot"/>
+        <q-btn @click="stopStreaming" color="black" glossy label="Зупинити cтрiм" />
+        <q-btn @click="snapshot" color="black" glossy label="Фото"/>
       </div>
       <video ref="videoRef" autoplay="true" width="100" id="video" />
       <div
@@ -29,7 +29,7 @@
         <final-result v-if="result.length > 0" :result="result" />
       </div>
       
-      <q-btn @click="detectImage" color="green-6" glossy label="Detect Object" />
+      <q-btn @click="detectImage" color="green-6" glossy label="Визначити снаряд" />
       
       <div v-if="result.length > 0">
         <p>{{ result[0].class }}</p>
