@@ -1,9 +1,21 @@
 <template>
   <div class="w-3/4 m-auto">
-    <div style="margin: 8px;">
-      <h3 class="text-2xl text-green-800" style="margin-top: 0; text-align: center;">Виберiть або сфотографуйте</h3>
-      <div style="max-width: 300px; margin-bottom: 40px;">
-        <q-file v-model="fileRef" color="light-green-5" glossy bg-color="green-6" filled label="Вибрати файл">
+    <div style="margin: 8px">
+      <h3
+        class="text-2xl text-green-800"
+        style="margin-top: 0; text-align: center"
+      >
+        Виберiть або сфотографуйте
+      </h3>
+      <div style="max-width: 300px; margin-bottom: 40px">
+        <q-file
+          v-model="fileRef"
+          color="light-green-5"
+          glossy
+          bg-color="green-6"
+          filled
+          label="Вибрати файл"
+        >
           <template v-slot:prepend>
             <q-icon name="attachment" color="light-green-5" />
           </template>
@@ -11,26 +23,48 @@
       </div>
 
       <div v-if="!isStreaming">
-        <q-btn @click="openCamera" color="green-6" glossy label="Вiдкрити камеру"  />
+        <q-btn
+          @click="openCamera"
+          color="green-6"
+          glossy
+          label="Вiдкрити камеру"
+        />
       </div>
       <div v-else class="flex justify-between">
-        <q-btn @click="stopStreaming" color="black" glossy label="Зупинити cтрiм" />
-        <q-btn @click="snapshot" color="black" glossy label="Фото"/>
+        <q-btn
+          @click="stopStreaming"
+          color="black"
+          glossy
+          label="Зупинити cтрiм"
+        />
+        <q-btn @click="snapshot" color="black" glossy label="Фото" />
       </div>
       <video ref="videoRef" autoplay="true" width="100" id="video" />
       <div
         class="bg-gray-300 h-64 w-64 rounded-lg shadow-md bg-cover bg-center"
       >
+        <q-btn
+          v-if="urlRef"
+          @click="detectImage"
+          color="green-6"
+          glossy
+          label="Визначити снаряд"
+        />
         <img
+          v-if="urlRef"
           :src="urlRef"
+          ref="imgRef"
+          style="height: 340px; max-width: 350px"
+        />
+        <img
+          v-else
+          :src="noImageUrlRef"
           ref="imgRef"
           style="height: 340px; max-width: 350px"
         />
         <final-result v-if="result.length > 0" :result="result" />
       </div>
-      
-      <q-btn @click="detectImage" color="green-6" glossy label="Визначити снаряд" />
-      
+
       <div v-if="result.length > 0">
         <p>{{ result[0].class }}</p>
       </div>
@@ -47,15 +81,16 @@ import FinalResult from 'components/FinalResult.vue';
 const video = document.getElementById('video') as HTMLVideoElement;
 const img = document.getElementById('video') as HTMLImageElement;
 const classifier = imageClassifierFactory();
-const url = 'ТМ-62М.png'
+const noImageUrl = 'no-image.png';
 
 export default defineComponent({
   name: 'App',
-  components: {FinalResult},
+  components: { FinalResult },
   setup() {
     const imgRef = ref(img);
-    const fileRef = ref<HTMLVideoElement>(video)
-    const urlRef = ref<any>(url)
+    const fileRef = ref<HTMLVideoElement>(video);
+    const urlRef = ref<any>(undefined);
+    const noImageUrlRef = ref<any>(noImageUrl);
     const videoRef = ref<HTMLVideoElement>(video);
     const isStreaming = ref(false);
     const result = ref([]) as Ref<any[]>;
@@ -102,24 +137,24 @@ export default defineComponent({
 
       ctx.drawImage(videoRef.value, 0, 0, 400, 400);
       const data = canvas.toDataURL('image/png');
-   
+
       imgRef.value.setAttribute('src', data);
     }
 
-    function blobToBase64(blob:Blob) {
+    function blobToBase64(blob: Blob) {
       return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onloadend = () => {
           resolve(reader.result);
-        }
+        };
         reader.readAsDataURL(blob);
-      })
+      });
     }
 
-    watch(fileRef, val => {
-      blobToBase64(val as any).then(res => {
-        urlRef.value = res
-      })
+    watch(fileRef, (val) => {
+      blobToBase64(val as any).then((res) => {
+        urlRef.value = res;
+      });
     });
 
     return {
@@ -132,14 +167,15 @@ export default defineComponent({
       snapshot,
       detectImage,
       fileRef,
-      urlRef
+      urlRef,
+      noImageUrlRef,
     };
   },
 });
 </script>
 
 <style lang="scss">
-  .q-field__native {
-    color: white;
-  }
+.q-field__native {
+  color: white;
+}
 </style>
