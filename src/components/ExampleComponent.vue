@@ -97,23 +97,27 @@ export default defineComponent({
 
     async function openCamera() {
       if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: {
-          width: {
-            min: 1280,
-            ideal: 1920,
-            max: 2560,
-          },
-          height: {
-            min: 720,
-            ideal: 1080,
-            max: 1440
-          },
-          facingMode: 'environment'
-        }}).then((stream) => {
-          isStreaming.value = true;
+        navigator.mediaDevices
+          .getUserMedia({
+            video: {
+              width: {
+                min: 1280,
+                ideal: 1920,
+                max: 2560,
+              },
+              height: {
+                min: 720,
+                ideal: 1080,
+                max: 1440,
+              },
+              facingMode: 'environment',
+            },
+          })
+          .then((stream) => {
+            isStreaming.value = true;
 
-          videoRef.value.srcObject = stream;
-        });
+            videoRef.value.srcObject = stream;
+          });
       }
     }
 
@@ -137,8 +141,7 @@ export default defineComponent({
 
       ctx.drawImage(videoRef.value, 0, 0, 400, 400);
       const data = canvas.toDataURL('image/png');
-
-      imgRef.value.setAttribute('src', data);
+      urlRef.value = data;
     }
 
     function blobToBase64(blob: Blob) {
